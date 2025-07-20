@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midjourney Project – Cinematic Styling & Mood | Daneen Mays</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --surface: #FFFFFF;
+            --surface-alt: #F9FAFB;
+            --border: #E5E7EB;
+            --code-bg: #F3F4F6;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--surface);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .back-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .back-nav:hover {
+            color: var(--primary);
+        }
+
+        /* Project Header */
+        .project-header {
+            padding: 80px 0 60px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .project-title {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+
+        .project-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Image Pair Sections */
+        .content-section {
+            padding: 80px 0;
+        }
+
+        .image-pair-section {
+            margin-bottom: 80px;
+        }
+
+        .image-pair-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .section-header p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .image-container {
+            background: var(--surface-alt);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Updated image handling */
+        .image-wrapper {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            background: var(--surface-alt);
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .image-wrapper img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Modal for enlarged images */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .image-details {
+            padding: 24px;
+            flex: 1;
+        }
+
+        .image-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .prompt-code {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 120px;
+            min-height: 60px;
+        }
+
+        .prompt-code::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .prompt-code::-webkit-scrollbar-track {
+            background: var(--surface-alt);
+            border-radius: 3px;
+        }
+
+        .prompt-code::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .prompt-code::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        .prompt-insight {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Comparison Summary */
+        .comparison-summary {
+            background: var(--surface-alt);
+            border-radius: 12px;
+            padding: 32px;
+            margin-top: 40px;
+            border: 1px solid var(--border);
+        }
+
+        .comparison-summary h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .comparison-summary p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Process Section */
+        .process-section {
+            background: var(--surface-alt);
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .process-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .process-intro {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .process-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .process-list li {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 16px;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .process-list li:last-child {
+            border-bottom: none;
+        }
+
+        .process-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .process-list strong {
+            color: var(--text-primary);
+        }
+
+        /* Reflection Section */
+        .reflection-section {
+            padding: 80px 0;
+        }
+
+        .reflection-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .reflection-text {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 48px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 32px;
+            }
+
+            .project-subtitle {
+                font-size: 18px;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .content-section {
+                padding: 60px 0;
+            }
+
+            .process-section,
+            .reflection-section {
+                padding: 60px 0;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .comparison-summary {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .project-header {
+                padding: 60px 0 40px;
+            }
+
+            .image-pair-section {
+                margin-bottom: 60px;
+            }
+
+            .prompt-code {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="../../index.html" class="logo">Daneen Mays</a>
+            <a href="../../index.html" class="back-nav">
+                ← Back to Portfolio
+            </a>
+        </nav>
+    </header>
+
+    <!-- Project Header -->
+    <section class="project-header">
+        <div class="container">
+            <h1 class="project-title">Midjourney Project – Cinematic Styling & Mood</h1>
+            <p class="project-subtitle">A focused exploration of how lighting, composition, and palette — altered through prompt variation — shape emotional tone and cinematic style. Each test isolates one variable to study its effect on visual storytelling using Midjourney's generative tools.</p>
+        </div>
+    </section>
+
+    <!-- Image Pair Sections -->
+    <section class="content-section">
+        <div class="container">
+            <!-- Experiment 1: Lighting Study -->
+            <div class="image-pair-section">
+                <div class="section-header">
+                    <h3>Experiment 1: Lighting Study</h3>
+                    <p>Testing how different light sources affect the emotional tone of the same scene</p>
+                </div>
+                <div class="image-grid">
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="/assets/woman_candlelit_library.png" alt="Woman under candlelight" onclick="openModal(this)" />
+                        </div>
+                        <div class="image-details">
+                            <div class="image-label">Warm Candlelight</div>
+                            <div class="prompt-code">A woman reading an old book in an ancient gothic library with stone columns and wooden shelves, lit only 
+                                by a candle placed beside her on the table. Golden flickering light, warm amber glow, deep shadows, rich textures.
+                                Cinematic composition, moody atmosphere, chiaroscuro lighting, filmic detail. Centered framing, shallow depth of field, 3:2 aspect ratio.
+                                Do not include floating books or objects. Ensure the book is closed or clearly supported by her hands or the table. No modern elements, 
+                                no floating candles, no visible text. Allow background textures like worn books and arches for ambient detail.</div>
+                            <p class="prompt-insight">Golden candlelight softens the scene, inviting intimacy and calm. The woman feels protected in solitude, almost devotional. A moment of peace.</p>
+                        </div>
+                    </div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="/assets/woman_coldIsolation_library.png" alt="Woman under moonlight" onclick="openModal(this)" />
+                        </div>
+                        <div class="image-details">
+                            <div class="image-label">Cold Moonlight</div>
+                            <div class="prompt-code">A woman reading an old book in an ancient gothic library with stone columns and wooden shelves, lit only by pale moonlight
+                                streaming through a high arched window. Cool silver-blue tones, long soft shadows, icy highlights on her face and the page, faint mist or dust in the air. 
+                                Cinematic composition, melancholic atmosphere, moonlit chiaroscuro, filmic detail. Centered framing, shallow depth of field, 3:2 aspect ratio. Do not include 
+                                floating books or objects. Ensure the book is closed or clearly supported by her hands or the table. No modern elements, no floating candles, no visible text. 
+                                Allow background textures like worn books and arches for ambient detail.</div>
+                            <p class="prompt-insight">Cool moonlight shifts the same act into one of isolation. Stillness becomes haunting. The silence is no longer warm — it feels weighty. The light touches her, but doesn't hold her.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="comparison-summary">
+                    <h4>Key Finding: Light Temperature = Emotional Temperature</h4>
+                    <p>By changing only the light source from warm candlelight to cool moonlight, the identical scene transforms from intimate sanctuary to melancholic isolation. This demonstrates how lighting alone can completely reframe the emotional narrative without altering composition or subject matter.</p>
+                </div>
+            </div>
+
+            <!-- Experiment 2: Composition Study -->
+            <div class="image-pair-section">
+                <div class="section-header">
+                    <h3>Experiment 2: Composition Study</h3>
+                    <p>Exploring how framing choices impact emotional connection and narrative focus</p>
+                </div>
+                <div class="image-grid">
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                          <img src="/assets/humanoidspirit_dreamlike.png" alt="humanoid spirit wide shot" onclick="openModal(this)" />
+                        </div>
+                        <div class="image-details">
+                            <div class="image-label">Wide Composition</div>
+                            <div class="prompt-code">A glowing humanoid spirit standing in the center of an endless desert made entirely of broken mirror shards. The 
+                                landscape is surreal and dreamlike, with fractured reflections of sky and figure in every direction. Lit only by ambient ethereal light 
+                                radiating from the spirit. Soft glow, distant shadows, shimmering surfaces, and ghostlike atmosphere. Cinematic wide composition, emotionally 
+                                abstract, 16:9 aspect ratio. Do not include additional figures, symbols, or text. No modern structures, no horizon line. Allow background texture to 
+                                suggest infinite scale through layered reflections and ambient haze.</div>
+                            <p class="prompt-insight">The spirit feels small and symbolic in surreal vastness. The mood is cosmic and detached.</p>
+                        </div>
+                    </div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="/assets/humanoidspirit.png" alt="humanoid spirit close-up" onclick="openModal(this)" />
+                        </div>
+                        <div class="image-details">
+                            <div class="image-label">Close-Up Composition</div>
+                            <div class="prompt-code">A glowing humanoid spirit standing in the center of an endless desert made entirely of broken mirror shards. The landscape is 
+                                surreal and dreamlike, with fractured reflections of sky and figure in every direction. Lit only by ambient ethereal light radiating from the spirit. 
+                                Soft glow, distant shadows, shimmering surfaces, and ghostlike atmosphere. Close-up composition focusing on the upper torso and head of the figure, 
+                                shallow depth of field, 16:9 aspect ratio. Do not include additional figures, symbols, or text. No modern structures, no horizon line. Allow background 
+                                texture to suggest infinite scale through layered reflections and ambient haze.</div>
+                            <p class="prompt-insight">A tighter frame on reflections introduces emotional closeness and surreal vulnerability.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="comparison-summary">
+                    <h4>Key Finding: Distance = Emotional Engagement</h4>
+                    <p>Wide framing creates philosophical distance and cosmic perspective, while close-up framing builds intimate connection and emotional vulnerability. The same surreal environment becomes either contemplative or personal based purely on camera distance.</p>
+                </div>
+            </div>
+
+            <!-- Experiment 3: Color Palette Study -->
+            <div class="image-pair-section">
+                <div class="section-header">
+                    <h3>Experiment 3: Color Palette Study</h3>
+                    <p>Investigating how saturation levels influence the perceived energy and mood of fantastical scenes</p>
+                </div>
+                <div class="image-grid">
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="/assets/animatedvibrant_frog.png" alt="vibrant animated frog" onclick="openModal(this)" />
+                        </div>
+                        <div class="image-details">
+                            <div class="image-label">Vibrant Palette</div>
+                            <div class="prompt-code">A small, animated fantasy frog sitting on a glowing mushroom in the heart of a bioluminescent jungle. The environment is rendered in 
+                                vibrant, saturated tones: electric purple vines, bright teal leaves, and glowing golden fireflies dancing in the background. Light sources create 
+                                high contrast reflections off the frog's emerald green skin. Energetic, magical surroundings with a rich, fantastical palette, whimsical atmosphere, 
+                                and sharp cinematic quality. Shallow depth of field, dynamic lighting, vivid mood. 16:9 aspect ratio. Do not include other animals, symbols, or text. 
+                                Keep focus on the vibrant palette and magical energy.</div>
+                            <p class="prompt-insight">The frog scene is electric with color, evoking wonder, energy, and fantasy immersion.</p>
+                        </div>
+                    </div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="/assets/animatedfrog.png" alt="muted animated frog" onclick="openModal(this)" />
+                        </div>
+                        <div class="image-details">
+                            <div class="image-label">Muted Palette</div>
+                            <div class="prompt-code">A small, animated fantasy frog sitting on a glowing mushroom in the heart of a bioluminescent jungle. The environment is rendered in 
+                                desaturated tones: dusty pink vines, dim teal leaves, and faint golden fireflies drifting in the background. Light sources softly reflect off the frog's 
+                                dull green skin with minimal contrast. Subdued, enchanted surroundings with a restrained palette, dreamy atmosphere, and softened cinematic quality. 
+                                Shallow depth of field, soft motion blur, muted mood. 16:9 aspect ratio. Do not include other animals, symbols, or text. Keep focus on the subdued palette and tone.</div>
+                            <p class="prompt-insight">Desaturated tones pull the magical world into quiet surrealism. The colors are restrained, mysterious — a calm contrast to the same environment.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="comparison-summary">
+                    <h4>Key Finding: Saturation = Energy Level</h4>
+                    <p>Vibrant colors create excitement and wonder, making the fantasy world feel alive and inviting. Muted tones transform the same magical environment into something contemplative and dreamlike, proving that color saturation directly controls emotional energy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Breakdown -->
+    <section class="process-section">
+        <div class="container">
+            <h2 class="section-title">My Prompting Process</h2>
+            <div class="process-content">
+                <p class="process-intro">I use my own structured framework — I.C.S.S.B.CF — to build each prompt with clarity, consistency, and creative flexibility:</p>
+                <ul class="process-list">
+                    <li><strong>Intent:</strong> Define the purpose or emotional goal of the image.</li>
+                    <li><strong>Context:</strong> Set the narrative or environment around the subject.</li>
+                    <li><strong>Specifics:</strong> Add vivid details to anchor the generation (subject position, lighting, action, etc.).</li>
+                    <li><strong>Style & Mood:</strong> Apply cinematic or aesthetic language to evoke a tone.</li>
+                    <li><strong>Blueprint:</strong> Use consistent structure for compositional elements.</li>
+                    <li><strong>Constraints:</strong> State what must be avoided or excluded (e.g., no text, no extra subjects).</li>
+                    <li><strong>Free:</strong> Allow some creative flexibility so the model can enhance with artistic choices.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reflection Section -->
+    <section class="reflection-section">
+        <div class="container">
+            <div class="reflection-content">
+                <h2 class="section-title">What This Project Demonstrates</h2>
+                <p class="reflection-text">This project highlights my systematic approach to visual prompt engineering, combining creative intuition with structured experimentation. By isolating individual variables and documenting their visual impact, I demonstrate both artistic control and QA-level precision.</p>
+                <p class="reflection-text">It reveals how small prompt adjustments can significantly influence mood, composition, and aesthetic tone. The ability to balance creativity with analytical rigor is essential for building consistent, enterprise-grade visual outputs and it's at the core of how I approach AI collaboration.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-name">Daneen Mays</div>
+                <div class="footer-links">
+                    <a href="/index.html">Portfolio</a>
+                    <a href="/Daneen.pdf">Resume</a>
+                    <a href="https://github.com/DaneenM">GitHub</a>
+                    <a href="https://linkedin.com/in/daneen-mays">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for enlarged images -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        function openModal(img) {
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+            
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("imageModal");
+            modal.style.display = "none";
+            
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
