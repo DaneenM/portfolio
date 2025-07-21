@@ -1,966 +1,1078 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sora Video Prompt Engineering | Daneen Mays</title>
     <style>
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        :root {
-            --primary: #4F46E5;
-            --primary-hover: #4338CA;
-            --text-primary: #1F2937;
-            --text-secondary: #6B7280;
-            --text-muted: #9CA3AF;
-            --surface: #FFFFFF;
-            --surface-alt: #F9FAFB;
-            --border: #E5E7EB;
-            --code-bg: #F3F4F6;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --error: #EF4444;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
+      :root {
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --text-muted: #9ca3af;
+        --surface: #ffffff;
+        --surface-alt: #f9fafb;
+        --border: #e5e7eb;
+        --code-bg: #f3f4f6;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --error: #ef4444;
+        --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-            line-height: 1.6;
-            color: var(--text-primary);
-            background: var(--surface);
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+          sans-serif;
+        line-height: 1.6;
+        color: var(--text-primary);
+        background: var(--surface);
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
 
-        /* Header */
-        header {
-            padding: 24px 0;
-            border-bottom: 1px solid var(--border);
-        }
+      /* Header */
+      header {
+        padding: 24px 0;
+        border-bottom: 1px solid var(--border);
+      }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        .logo {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-primary);
-            text-decoration: none;
-        }
+      .logo {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
 
-        .back-nav {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
+      .back-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+      }
 
-        .back-nav:hover {
-            color: var(--primary);
-        }
+      .back-nav:hover {
+        color: var(--primary);
+      }
 
-        /* Hero Section */
-        .hero-section {
-            padding: 80px 0 60px;
-            text-align: center;
-            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
-            border-bottom: 1px solid var(--border);
-        }
+      /* Hero Section */
+      .hero-section {
+        padding: 80px 0 60px;
+        text-align: center;
+        background: linear-gradient(
+          135deg,
+          var(--surface) 0%,
+          var(--surface-alt) 100%
+        );
+        border-bottom: 1px solid var(--border);
+      }
 
+      .hero-title {
+        font-size: 42px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+        line-height: 1.1;
+      }
+
+      .hero-subtitle {
+        font-size: 20px;
+        color: var(--text-secondary);
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.5;
+      }
+
+      /* Challenge Cards */
+      .challenges-section {
+        padding: 80px 0;
+      }
+
+      .challenges-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 40px;
+        margin-top: 40px;
+        align-items: start;
+      }
+
+      .challenge-card {
+        background: var(--surface);
+        border-radius: 16px;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        align-self: start;
+      }
+
+      .challenge-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      /* Card Header */
+      .card-header {
+        padding: 32px 32px 24px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .challenge-type {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 16px;
+      }
+
+      .challenge-type.realistic {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .challenge-type.animated {
+        background: #dbeafe;
+        color: #1d4ed8;
+      }
+
+      .card-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+
+      .card-description {
+        font-size: 16px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* Comparison Grid */
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      .comparison-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .comparison-label {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        text-align: center;
+      }
+
+      .failed-label {
+        background: #fef2f2;
+        color: var(--error);
+        border: 1px solid #fecaca;
+      }
+
+      .success-label {
+        background: #f0fdf4;
+        color: var(--success);
+        border: 1px solid #bbf7d0;
+      }
+
+      /* Video Result Section */
+      .video-result {
+        padding: 24px 32px;
+        background: var(--surface-alt);
+      }
+
+      /* Comparison Grid */
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      .comparison-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .comparison-label {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        text-align: center;
+      }
+
+      .failed-label {
+        background: #fef2f2;
+        color: var(--error);
+        border: 1px solid #fecaca;
+      }
+
+      .success-label {
+        background: #f0fdf4;
+        color: var(--success);
+        border: 1px solid #bbf7d0;
+      }
+
+      .result-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Responsive Design for Comparison */
+      @media (max-width: 768px) {
+        .comparison-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+      }
+
+      .video-container {
+        width: 100%;
+        height: 300px;
+        background: #000;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 16px;
+        margin-bottom: 16px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .video-placeholder {
+        text-align: center;
+        padding: 40px;
+      }
+
+      /* Responsive Design for Comparison */
+      @media (max-width: 768px) {
+        .comparison-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+      }
+
+      .final-prompt {
+        background: var(--success);
+        color: white;
+        padding: 16px;
+        border-radius: 8px;
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+        font-size: 13px;
+        line-height: 1.4;
+        margin-top: 12px;
+      }
+
+      .iteration-toggle {
+        width: 100%;
+        padding: 24px 32px;
+        background: none;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--primary);
+        transition: background-color 0.2s ease;
+      }
+
+      .iteration-toggle:hover {
+        background: var(--surface-alt);
+      }
+
+      .toggle-icon {
+        font-size: 20px;
+        transition: transform 0.2s ease;
+      }
+
+      .iteration-toggle.expanded .toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      .iteration-content {
+        display: none;
+        padding: 0 32px 32px;
+      }
+
+      .iteration-content.expanded {
+        display: block;
+        animation: slideDown 0.3s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Iteration Steps */
+      .iteration-step {
+        margin-bottom: 32px;
+        padding: 24px;
+        border-radius: 12px;
+        border-left: 4px solid var(--border);
+      }
+
+      .iteration-step.failed {
+        border-left-color: var(--error);
+        background: #fef2f2;
+      }
+
+      .iteration-step.improved {
+        border-left-color: var(--warning);
+        background: #fffbeb;
+      }
+
+      .iteration-step.success {
+        border-left-color: var(--success);
+        background: #f0fdf4;
+      }
+
+      .step-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+      }
+
+      .failed .step-number {
+        background: var(--error);
+      }
+
+      .improved .step-number {
+        background: var(--warning);
+      }
+
+      .success .step-number {
+        background: var(--success);
+      }
+
+      .step-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .step-status {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .failed .step-status {
+        background: var(--error);
+        color: white;
+      }
+
+      .improved .step-status {
+        background: var(--warning);
+        color: white;
+      }
+
+      .success .step-status {
+        background: var(--success);
+        color: white;
+      }
+
+      .prompt-code {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+        font-size: 13px;
+        color: var(--text-primary);
+        margin: 12px 0;
+        line-height: 1.4;
+      }
+
+      .step-analysis {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-top: 12px;
+      }
+
+      .step-insight {
+        background: var(--surface);
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 12px;
+        border-left: 3px solid var(--primary);
+      }
+
+      .step-insight strong {
+        color: var(--text-primary);
+      }
+
+      /* Methodology Section */
+      .methodology-section {
+        background: var(--surface-alt);
+        padding: 80px 0;
+      }
+
+      .section-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 32px;
+        color: var(--text-primary);
+        text-align: center;
+      }
+
+      .methodology-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 32px;
+        margin-top: 40px;
+      }
+
+      .methodology-card {
+        background: var(--surface);
+        padding: 32px;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+      }
+
+      .methodology-card h4 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+      }
+
+      .methodology-card p {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* Footer */
+      footer {
+        background: var(--text-primary);
+        color: white;
+        padding: 48px 0;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+
+      .footer-name {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 24px;
+      }
+
+      .footer-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer-links a:hover {
+        color: white;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
         .hero-title {
-            font-size: 42px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 16px;
-            color: var(--text-primary);
-            line-height: 1.1;
+          font-size: 32px;
         }
 
         .hero-subtitle {
-            font-size: 20px;
-            color: var(--text-secondary);
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-
-        /* Challenge Cards */
-        .challenges-section {
-            padding: 80px 0;
+          font-size: 18px;
         }
 
         .challenges-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 40px;
-            margin-top: 40px;
+          grid-template-columns: 1fr;
+          gap: 24px;
         }
 
-        .challenge-card {
-            background: var(--surface);
-            border-radius: 16px;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .challenge-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        /* Card Header */
-        .card-header {
-            padding: 32px 32px 24px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .challenge-type {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 16px;
-        }
-
-        .challenge-type.realistic {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .challenge-type.animated {
-            background: #DBEAFE;
-            color: #1D4ED8;
-        }
-
-        .card-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-        }
-
-        .card-description {
-            font-size: 16px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* Comparison Grid */
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .comparison-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .comparison-label {
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .failed-label {
-            background: #FEF2F2;
-            color: var(--error);
-            border: 1px solid #FECACA;
-        }
-
-        .success-label {
-            background: #F0FDF4;
-            color: var(--success);
-            border: 1px solid #BBF7D0;
-        }
-
-        /* Video Result Section */
-        .video-result {
-            padding: 24px 32px;
-            background: var(--surface-alt);
-        }
-
-        /* Comparison Grid */
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .comparison-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .comparison-label {
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .failed-label {
-            background: #FEF2F2;
-            color: var(--error);
-            border: 1px solid #FECACA;
-        }
-
-        .success-label {
-            background: #F0FDF4;
-            color: var(--success);
-            border: 1px solid #BBF7D0;
-        }
-
-        .result-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Responsive Design for Comparison */
-        @media (max-width: 768px) {
-            .comparison-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-        }
-
-        .video-container {
-            width: 100%;
-            height: 300px;
-            background: #000;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 16px;
-            margin-bottom: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .video-placeholder {
-            text-align: center;
-            padding: 40px;
-        }
-
-        /* Responsive Design for Comparison */
-        @media (max-width: 768px) {
-            .comparison-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-        }
-
-        .final-prompt {
-            background: var(--success);
-            color: white;
-            padding: 16px;
-            border-radius: 8px;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 13px;
-            line-height: 1.4;
-            margin-top: 12px;
-        }
-
-        .iteration-toggle {
-            width: 100%;
-            padding: 24px 32px;
-            background: none;
-            border: none;
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--primary);
-            transition: background-color 0.2s ease;
-        }
-
-        .iteration-toggle:hover {
-            background: var(--surface-alt);
-        }
-
-        .toggle-icon {
-            font-size: 20px;
-            transition: transform 0.2s ease;
-        }
-
-        .iteration-toggle.expanded .toggle-icon {
-            transform: rotate(180deg);
-        }
-
+        .card-header,
+        .video-result,
+        .iteration-toggle,
         .iteration-content {
-            display: none;
-            padding: 0 32px 32px;
+          padding-left: 20px;
+          padding-right: 20px;
         }
 
-        .iteration-content.expanded {
-            display: block;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Iteration Steps */
-        .iteration-step {
-            margin-bottom: 32px;
-            padding: 24px;
-            border-radius: 12px;
-            border-left: 4px solid var(--border);
-        }
-
-        .iteration-step.failed {
-            border-left-color: var(--error);
-            background: #FEF2F2;
-        }
-
-        .iteration-step.improved {
-            border-left-color: var(--warning);
-            background: #FFFBEB;
-        }
-
-        .iteration-step.success {
-            border-left-color: var(--success);
-            background: #F0FDF4;
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-        }
-
-        .failed .step-number {
-            background: var(--error);
-        }
-
-        .improved .step-number {
-            background: var(--warning);
-        }
-
-        .success .step-number {
-            background: var(--success);
-        }
-
-        .step-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .step-status {
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .failed .step-status {
-            background: var(--error);
-            color: white;
-        }
-
-        .improved .step-status {
-            background: var(--warning);
-            color: white;
-        }
-
-        .success .step-status {
-            background: var(--success);
-            color: white;
-        }
-
-        .prompt-code {
-            background: var(--code-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 13px;
-            color: var(--text-primary);
-            margin: 12px 0;
-            line-height: 1.4;
-        }
-
-        .step-analysis {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-top: 12px;
-        }
-
-        .step-insight {
-            background: var(--surface);
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 12px;
-            border-left: 3px solid var(--primary);
-        }
-
-        .step-insight strong {
-            color: var(--text-primary);
-        }
-
-        /* Methodology Section */
+        .challenges-section,
         .methodology-section {
-            background: var(--surface-alt);
-            padding: 80px 0;
+          padding: 60px 0;
         }
-
-        .section-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 32px;
-            color: var(--text-primary);
-            text-align: center;
-        }
-
-        .methodology-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-            margin-top: 40px;
-        }
-
-        .methodology-card {
-            background: var(--surface);
-            padding: 32px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .methodology-card h4 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 16px;
-        }
-
-        .methodology-card p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--text-primary);
-            color: white;
-            padding: 48px 0;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 24px;
-        }
-
-        .footer-name {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 32px;
-            }
-
-            .hero-subtitle {
-                font-size: 18px;
-            }
-
-            .challenges-grid {
-                grid-template-columns: 1fr;
-                gap: 24px;
-            }
-
-            .card-header,
-            .video-result,
-            .iteration-toggle,
-            .iteration-content {
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-
-            .challenges-section,
-            .methodology-section {
-                padding: 60px 0;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Header -->
     <header>
-        <nav class="container">
-            <a href="../../index.html" class="logo">Daneen Mays</a>
-            <a href="../../index.html" class="back-nav">
-                ← Back to Portfolio
-            </a>
-        </nav>
+      <nav class="container">
+        <a href="../../index.html" class="logo">Daneen Mays</a>
+        <a href="../../index.html" class="back-nav"> ← Back to Portfolio </a>
+      </nav>
     </header>
 
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container">
-            <h1 class="hero-title">Sora Video Prompt Engineering</h1>
-            <p class="hero-subtitle">
-                Documenting my iterative problem-solving process across different video creation challenges. 
-                Each demonstration shows the journey from initial failure to refined success, highlighting 
-                systematic prompt engineering methodology for reliable, high-quality video content.
-            </p>
-        </div>
+      <div class="container">
+        <h1 class="hero-title">Sora Video Prompt Engineering</h1>
+        <p class="hero-subtitle">
+          Documenting my iterative problem-solving process across different
+          video creation challenges. Each demonstration shows the journey from
+          initial failure to refined success, highlighting systematic prompt
+          engineering methodology for reliable, high-quality video content.
+        </p>
+      </div>
     </section>
 
     <!-- Challenge Demonstrations -->
     <section class="challenges-section">
-        <div class="container">
-            <div class="challenges-grid">
-                
-                <!-- Challenge 1: Business/Corporate Realism -->
-                <div class="challenge-card">
-                    <div class="card-header">
-                        <span class="challenge-type realistic">Business</span>
-                        <h3 class="card-title">Corporate Presentation Camera Work</h3>
-                        <p class="card-description">
-                            Creating professional camera movement for business presentations and corporate environments. 
-                            The challenge: achieving smooth, broadcast-quality tracking shots that enhance professional 
-                            credibility without distracting from business content.
-                        </p>
-                    </div>
-
-                    <div class="video-result">
-                        <div class="result-label">Before & After Comparison</div>
-                        <div class="comparison-grid">
-                            <div class="comparison-item">
-                                <div class="comparison-label failed-label">Before (Failed Attempt)</div>
-                                <div class="video-container">
-                                    <div class="video-placeholder">
-                                        [Erratic camera movement with jerky motion and presenter moving in/out of frame]<br>
-                                        <small>Generic prompt: "Camera follows presenter walking in conference room"</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="comparison-item">
-                                <div class="comparison-label success-label">After (Final Success)</div>
-                                <div class="video-container">
-                                    <div class="video-placeholder">
-                                        [Professional dolly shot with stable tracking and perfect presenter framing]<br>
-                                        <small>Systematic refinement through 6 iterations of prompt engineering</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="final-prompt">
-                            Professional dolly tracking shot following business presenter walking alongside large wall-mounted 
-                            display screen in modern conference room. Camera maintains precise 6-foot distance, presenter 
-                            positioned in left third of frame, display screen fully visible on right side. Smooth parallel 
-                            tracking motion, no camera shake, consistent focal length 35mm, professional corporate lighting, 
-                            sharp focus on presenter with subtle background blur. Executive presentation environment, 
-                            broadcast-quality cinematography, stable framing throughout sequence.
-                        </div>
-                    </div>
-
-                    <div class="iteration-section">
-                        <button class="iteration-toggle" onclick="toggleIteration('realistic')">
-                            <span>View Iteration Process</span>
-                            <span class="toggle-icon">▼</span>
-                        </button>
-                        
-                        <div class="iteration-content" id="realistic-content">
-                            <!-- Iteration 1: Failed -->
-                            <div class="iteration-step failed">
-                                <div class="step-header">
-                                    <div class="step-number">1</div>
-                                    <div class="step-title">Basic Motion Request</div>
-                                    <div class="step-status">Failed</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Camera follows presenter walking in conference room, smooth movement, professional setting"
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Extremely erratic camera motion with sudden jerky movements, presenter 
-                                    constantly moving in/out of frame, chaotic direction changes, unusable for professional content.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Problem Identified:</strong> Generic "follows" and "smooth" terms trigger Sora's worst 
-                                    camera control issues. Completely unpredictable motion patterns.
-                                </div>
-                            </div>
-
-                            <!-- Iteration 2: Equipment Terms -->
-                            <div class="iteration-step failed">
-                                <div class="step-header">
-                                    <div class="step-number">2</div>
-                                    <div class="step-title">Professional Equipment Approach</div>
-                                    <div class="step-status">Failed</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Steadicam shot of business presenter walking beside wall display, conference room"
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Less chaotic but still major issues - presenter appeared/disappeared, 
-                                    display screen randomly vanished, spatial positioning completely inconsistent.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Learning:</strong> Equipment terms help stability but don't solve object permanence 
-                                    or spatial consistency. Still unusable for business content.
-                                </div>
-                            </div>
-
-                            <!-- Iteration 3: Spatial Constraints -->
-                            <div class="iteration-step improved">
-                                <div class="step-header">
-                                    <div class="step-number">3</div>
-                                    <div class="step-title">Added Spatial Positioning</div>
-                                    <div class="step-status">Improved</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Dolly shot, presenter in left frame, large screen on right, walking parallel in conference room"
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Better framing consistency but camera movement still felt unnatural, 
-                                    occasional spatial drift, and lighting/focus inconsistencies throughout the shot.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Progress:</strong> Explicit positioning helps combat left/right confusion. Need more 
-                                    technical precision for professional quality.
-                                </div>
-                            </div>
-
-                            <!-- Iteration 4: Technical Parameters -->
-                            <div class="iteration-step improved">
-                                <div class="step-header">
-                                    <div class="step-number">4</div>
-                                    <div class="step-title">Distance & Motion Specifications</div>
-                                    <div class="step-status">Improved</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Dolly track, maintain 6-foot distance, presenter left third, screen right side, 
-                                    parallel motion, no camera shake, modern conference room"
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Much more stable tracking and consistent distance, but motion still 
-                                    lacked professional smoothness and lighting wasn't broadcast quality.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Insight:</strong> Specific distance parameters work well. Need professional 
-                                    cinematography language for broadcast polish.
-                                </div>
-                            </div>
-
-                            <!-- Iteration 5: Professional Polish -->
-                            <div class="iteration-step improved">
-                                <div class="step-header">
-                                    <div class="step-number">5</div>
-                                    <div class="step-title">Broadcast Quality Attempt</div>
-                                    <div class="step-status">Better</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Professional dolly tracking shot, business presenter walking alongside wall-mounted display. 
-                                    Camera maintains 6-foot distance, presenter in left third, screen visible right. Smooth parallel motion, 
-                                    corporate lighting, professional cinematography."
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Professional quality motion and framing, but still occasional 
-                                    micro-inconsistencies in focus and minor spatial drift during longer sequences.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Almost There:</strong> Professional language improves quality significantly. 
-                                    Need final technical constraints for complete reliability.
-                                </div>
-                            </div>
-
-                            <!-- Iteration 6: Success -->
-                            <div class="iteration-step success">
-                                <div class="step-header">
-                                    <div class="step-number">6</div>
-                                    <div class="step-title">Broadcast-Grade Corporate Video</div>
-                                    <div class="step-status">Success</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Professional dolly tracking shot following business presenter walking alongside large wall-mounted 
-                                    display screen in modern conference room. Camera maintains precise 6-foot distance, presenter 
-                                    positioned in left third of frame, display screen fully visible on right side. Smooth parallel 
-                                    tracking motion, no camera shake, consistent focal length 35mm, professional corporate lighting, 
-                                    sharp focus on presenter with subtle background blur. Executive presentation environment, 
-                                    broadcast-quality cinematography, stable framing throughout sequence."
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Broadcast-quality corporate video with perfectly stable camera movement, 
-                                    consistent presenter positioning, reliable object permanence, and professional polish suitable 
-                                    for executive communications and corporate training content.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Key Breakthrough:</strong> Success requires layered technical precision: equipment terminology + 
-                                    explicit spatial constraints + distance parameters + focal length specification + parallel motion 
-                                    (not complex trajectory) + consistency commands. Corporate video demands systematic constraint 
-                                    architecture to overcome Sora's camera control limitations.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Challenge 2: Animated Character -->
-                <div class="challenge-card">
-                    <div class="card-header">
-                        <span class="challenge-type animated">Animated</span>
-                        <h3 class="card-title">Fox Character Consistency</h3>
-                        <p class="card-description">
-                            Maintaining consistent animated fox character design across multiple scenes with different 
-                            expressions and actions. The challenge: preventing character drift while achieving expressive 
-                            animation in a stylized, family-friendly aesthetic.
-                        </p>
-                    </div>
-
-                    <div class="video-result">
-                        <div class="result-label">Before & After Comparison</div>
-                        <div class="comparison-grid">
-                            <div class="comparison-item">
-                                <div class="comparison-label failed-label">Before (Failed Attempt)</div>
-                                <div class="video-container">
-                                    <div class="video-placeholder">
-                                        [Fox character morphing between species, changing colors, and losing distinctive features]<br>
-                                        <small>Generic prompt: "Orange fox character in animated style"</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="comparison-item">
-                                <div class="comparison-label success-label">After (Final Success)</div>
-                                <div class="video-container">
-                                    <div class="video-placeholder">
-                                        [Consistent Pixar-style fox with stable features across multiple emotional scenes]<br>
-                                        <small>Systematic character development through 3 iterations</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="final-prompt">
-                            Pixar-style 3D animated fox character: small to medium size, bright orange fur with cream-colored 
-                            chest and inner ears, distinctive black-tipped ears and tail, large expressive amber eyes, black nose, 
-                            friendly facial structure with slightly rounded snout. Consistent character design across scenes, 
-                            maintain fur texture and color patterns, warm lighting, family-friendly animation style, expressive 
-                            but stable features throughout different emotions and actions.
-                        </div>
-                    </div>
-
-                    <div class="iteration-section">
-                        <button class="iteration-toggle" onclick="toggleIteration('animated')">
-                            <span>View Iteration Process</span>
-                            <span class="toggle-icon">▼</span>
-                        </button>
-                        
-                        <div class="iteration-content" id="animated-content">
-                            <!-- Iteration 1: Failed -->
-                            <div class="iteration-step failed">
-                                <div class="step-header">
-                                    <div class="step-number">1</div>
-                                    <div class="step-title">Basic Animal Description</div>
-                                    <div class="step-status">Failed</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Orange fox character in animated style"
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Severe character drift between scenes. Fox sometimes transformed into 
-                                    different animals (dog, wolf), fur color changed from orange to brown/red, and ears spontaneously 
-                                    changed shape and size.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Problem Identified:</strong> Classic Sora limitation - vague descriptors cause character drift 
-                                    and species confusion. Objects/characters can "morph" unexpectedly during transitions.
-                                </div>
-                            </div>
-
-                            <!-- Iteration 2: Improved -->
-                            <div class="iteration-step improved">
-                                <div class="step-header">
-                                    <div class="step-number">2</div>
-                                    <div class="step-title">Detailed Character Features</div>
-                                    <div class="step-status">Improved</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Small orange fox with black-tipped ears, cream chest, amber eyes, black nose, 
-                                    Pixar animation style"
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Better species consistency but still experienced character drift issues. 
-                                    Ear markings sometimes disappeared mid-scene, and facial proportions shifted slightly between cuts.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Learning:</strong> Specific anatomical details reduce morphing but don't eliminate Sora's 
-                                    object permanence issues. Characters can still lose distinctive features during video sequences.
-                                </div>
-                            </div>
-
-                            <!-- Iteration 3: Success -->
-                            <div class="iteration-step success">
-                                <div class="step-header">
-                                    <div class="step-number">3</div>
-                                    <div class="step-title">Complete Character DNA + Consistency Commands</div>
-                                    <div class="step-status">Success</div>
-                                </div>
-                                <div class="prompt-code">
-                                    "Pixar-style 3D animated fox character: small to medium size, bright orange fur with cream-colored 
-                                    chest and inner ears, distinctive black-tipped ears and tail, large expressive amber eyes, black nose, 
-                                    friendly facial structure with slightly rounded snout. Consistent character design across scenes, 
-                                    maintain fur texture and color patterns, warm lighting, family-friendly animation style, expressive 
-                                    but stable features throughout different emotions and actions."
-                                </div>
-                                <div class="step-analysis">
-                                    <strong>Result:</strong> Reliable character consistency across multiple scenes with maintained 
-                                    anatomical features, color patterns, and distinctive markings while allowing natural expression range.
-                                </div>
-                                <div class="step-insight">
-                                    <strong>Key Breakthrough:</strong> Comprehensive character profile + explicit "maintain" commands + 
-                                    "consistent design across scenes" directly addresses Sora's morphing/permanence issues. Detailed 
-                                    anatomical anchors prevent species drift.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+      <div class="container">
+        <div class="challenges-grid">
+          <!-- Challenge 1: Business/Corporate Realism -->
+          <div class="challenge-card">
+            <div class="card-header">
+              <span class="challenge-type realistic">Business</span>
+              <h3 class="card-title">Corporate Presentation Camera Work</h3>
+              <p class="card-description">
+                Creating professional camera movement for business presentations
+                and corporate environments. The challenge: achieving smooth,
+                broadcast-quality tracking shots that enhance professional
+                credibility without distracting from business content.
+              </p>
             </div>
+
+            <div class="video-result">
+              <div class="result-label">Before & After Comparison</div>
+              <div class="comparison-grid">
+                <div class="comparison-item">
+                  <div class="comparison-label failed-label">
+                    Before (Failed Attempt)
+                  </div>
+                  <div class="video-container">
+                    <div class="video-placeholder">
+                      [Erratic camera movement with jerky motion and presenter
+                      moving in/out of frame]<br />
+                      <small
+                        >Generic prompt: "Camera follows presenter walking in
+                        conference room"</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="comparison-item">
+                  <div class="comparison-label success-label">
+                    After (Final Success)
+                  </div>
+                  <div class="video-container">
+                    <div class="video-placeholder">
+                      [Professional dolly shot with stable tracking and perfect
+                      presenter framing]<br />
+                      <small
+                        >Systematic refinement through 6 iterations of prompt
+                        engineering</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="final-prompt">
+                Professional dolly tracking shot following business presenter
+                walking alongside large wall-mounted display screen in modern
+                conference room. Camera maintains precise 6-foot distance,
+                presenter positioned in left third of frame, display screen
+                fully visible on right side. Smooth parallel tracking motion, no
+                camera shake, consistent focal length 35mm, professional
+                corporate lighting, sharp focus on presenter with subtle
+                background blur. Executive presentation environment,
+                broadcast-quality cinematography, stable framing throughout
+                sequence.
+              </div>
+            </div>
+
+            <div class="iteration-section">
+              <button
+                class="iteration-toggle"
+                onclick="toggleIteration('realistic')"
+              >
+                <span>View Iteration Process</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+
+              <div class="iteration-content" id="realistic-content">
+                <!-- Iteration 1: Failed -->
+                <div class="iteration-step failed">
+                  <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Basic Motion Request</div>
+                    <div class="step-status">Failed</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Camera follows presenter walking in conference room, smooth
+                    movement, professional setting"
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Extremely erratic camera motion
+                    with sudden jerky movements, presenter constantly moving
+                    in/out of frame, chaotic direction changes, unusable for
+                    professional content.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Problem Identified:</strong> Generic "follows" and
+                    "smooth" terms trigger Sora's worst camera control issues.
+                    Completely unpredictable motion patterns.
+                  </div>
+                </div>
+
+                <!-- Iteration 2: Equipment Terms -->
+                <div class="iteration-step failed">
+                  <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">
+                      Professional Equipment Approach
+                    </div>
+                    <div class="step-status">Failed</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Steadicam shot of business presenter walking beside wall
+                    display, conference room"
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Less chaotic but still major issues
+                    - presenter appeared/disappeared, display screen randomly
+                    vanished, spatial positioning completely inconsistent.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Learning:</strong> Equipment terms help stability
+                    but don't solve object permanence or spatial consistency.
+                    Still unusable for business content.
+                  </div>
+                </div>
+
+                <!-- Iteration 3: Spatial Constraints -->
+                <div class="iteration-step improved">
+                  <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Added Spatial Positioning</div>
+                    <div class="step-status">Improved</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Dolly shot, presenter in left frame, large screen on right,
+                    walking parallel in conference room"
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Better framing consistency but
+                    camera movement still felt unnatural, occasional spatial
+                    drift, and lighting/focus inconsistencies throughout the
+                    shot.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Progress:</strong> Explicit positioning helps combat
+                    left/right confusion. Need more technical precision for
+                    professional quality.
+                  </div>
+                </div>
+
+                <!-- Iteration 4: Technical Parameters -->
+                <div class="iteration-step improved">
+                  <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">
+                      Distance & Motion Specifications
+                    </div>
+                    <div class="step-status">Improved</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Dolly track, maintain 6-foot distance, presenter left
+                    third, screen right side, parallel motion, no camera shake,
+                    modern conference room"
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Much more stable tracking and
+                    consistent distance, but motion still lacked professional
+                    smoothness and lighting wasn't broadcast quality.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Insight:</strong> Specific distance parameters work
+                    well. Need professional cinematography language for
+                    broadcast polish.
+                  </div>
+                </div>
+
+                <!-- Iteration 5: Professional Polish -->
+                <div class="iteration-step improved">
+                  <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Broadcast Quality Attempt</div>
+                    <div class="step-status">Better</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Professional dolly tracking shot, business presenter
+                    walking alongside wall-mounted display. Camera maintains
+                    6-foot distance, presenter in left third, screen visible
+                    right. Smooth parallel motion, corporate lighting,
+                    professional cinematography."
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Professional quality motion and
+                    framing, but still occasional micro-inconsistencies in focus
+                    and minor spatial drift during longer sequences.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Almost There:</strong> Professional language
+                    improves quality significantly. Need final technical
+                    constraints for complete reliability.
+                  </div>
+                </div>
+
+                <!-- Iteration 6: Success -->
+                <div class="iteration-step success">
+                  <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">
+                      Broadcast-Grade Corporate Video
+                    </div>
+                    <div class="step-status">Success</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Professional dolly tracking shot following business
+                    presenter walking alongside large wall-mounted display
+                    screen in modern conference room. Camera maintains precise
+                    6-foot distance, presenter positioned in left third of
+                    frame, display screen fully visible on right side. Smooth
+                    parallel tracking motion, no camera shake, consistent focal
+                    length 35mm, professional corporate lighting, sharp focus on
+                    presenter with subtle background blur. Executive
+                    presentation environment, broadcast-quality cinematography,
+                    stable framing throughout sequence."
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Broadcast-quality corporate video
+                    with perfectly stable camera movement, consistent presenter
+                    positioning, reliable object permanence, and professional
+                    polish suitable for executive communications and corporate
+                    training content.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Key Breakthrough:</strong> Success requires layered
+                    technical precision: equipment terminology + explicit
+                    spatial constraints + distance parameters + focal length
+                    specification + parallel motion (not complex trajectory) +
+                    consistency commands. Corporate video demands systematic
+                    constraint architecture to overcome Sora's camera control
+                    limitations.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Challenge 2: Animated Character -->
+          <div class="challenge-card">
+            <div class="card-header">
+              <span class="challenge-type animated">Animated</span>
+              <h3 class="card-title">Fox Character Consistency</h3>
+              <p class="card-description">
+                Maintaining consistent animated fox character design across
+                multiple scenes with different expressions and actions. The
+                challenge: preventing character drift while achieving expressive
+                animation in a stylized, family-friendly aesthetic.
+              </p>
+            </div>
+
+            <div class="video-result">
+              <div class="result-label">Before & After Comparison</div>
+              <div class="comparison-grid">
+                <div class="comparison-item">
+                  <div class="comparison-label failed-label">
+                    Before (Failed Attempt)
+                  </div>
+                  <div class="video-container">
+                    <div class="video-placeholder">
+                      [Fox character morphing between species, changing colors,
+                      and losing distinctive features]<br />
+                      <small
+                        >Generic prompt: "Orange fox character in animated
+                        style"</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="comparison-item">
+                  <div class="comparison-label success-label">
+                    After (Final Success)
+                  </div>
+                  <div class="video-container">
+                    <div class="video-placeholder">
+                      [Consistent Pixar-style fox with stable features across
+                      multiple emotional scenes]<br />
+                      <small
+                        >Systematic character development through 3
+                        iterations</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="final-prompt">
+                Pixar-style 3D animated fox character: small to medium size,
+                bright orange fur with cream-colored chest and inner ears,
+                distinctive black-tipped ears and tail, large expressive amber
+                eyes, black nose, friendly facial structure with slightly
+                rounded snout. Consistent character design across scenes,
+                maintain fur texture and color patterns, warm lighting,
+                family-friendly animation style, expressive but stable features
+                throughout different emotions and actions.
+              </div>
+            </div>
+
+            <div class="iteration-section">
+              <button
+                class="iteration-toggle"
+                onclick="toggleIteration('animated')"
+              >
+                <span>View Iteration Process</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+
+              <div class="iteration-content" id="animated-content">
+                <!-- Iteration 1: Failed -->
+                <div class="iteration-step failed">
+                  <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Basic Animal Description</div>
+                    <div class="step-status">Failed</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Orange fox character in animated style"
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Severe character drift between
+                    scenes. Fox sometimes transformed into different animals
+                    (dog, wolf), fur color changed from orange to brown/red, and
+                    ears spontaneously changed shape and size.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Problem Identified:</strong> Classic Sora limitation
+                    - vague descriptors cause character drift and species
+                    confusion. Objects/characters can "morph" unexpectedly
+                    during transitions.
+                  </div>
+                </div>
+
+                <!-- Iteration 2: Improved -->
+                <div class="iteration-step improved">
+                  <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Detailed Character Features</div>
+                    <div class="step-status">Improved</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Small orange fox with black-tipped ears, cream chest, amber
+                    eyes, black nose, Pixar animation style"
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Better species consistency but
+                    still experienced character drift issues. Ear markings
+                    sometimes disappeared mid-scene, and facial proportions
+                    shifted slightly between cuts.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Learning:</strong> Specific anatomical details
+                    reduce morphing but don't eliminate Sora's object permanence
+                    issues. Characters can still lose distinctive features
+                    during video sequences.
+                  </div>
+                </div>
+
+                <!-- Iteration 3: Success -->
+                <div class="iteration-step success">
+                  <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">
+                      Complete Character DNA + Consistency Commands
+                    </div>
+                    <div class="step-status">Success</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Pixar-style 3D animated fox character: small to medium
+                    size, bright orange fur with cream-colored chest and inner
+                    ears, distinctive black-tipped ears and tail, large
+                    expressive amber eyes, black nose, friendly facial structure
+                    with slightly rounded snout. Consistent character design
+                    across scenes, maintain fur texture and color patterns, warm
+                    lighting, family-friendly animation style, expressive but
+                    stable features throughout different emotions and actions."
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Reliable character consistency
+                    across multiple scenes with maintained anatomical features,
+                    color patterns, and distinctive markings while allowing
+                    natural expression range.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Key Breakthrough:</strong> Comprehensive character
+                    profile + explicit "maintain" commands + "consistent design
+                    across scenes" directly addresses Sora's morphing/permanence
+                    issues. Detailed anatomical anchors prevent species drift.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Methodology Extraction -->
     <section class="methodology-section">
-        <div class="container">
-            <h2 class="section-title">Reusable Methodology</h2>
-            <div class="methodology-grid">
-                <div class="methodology-card">
-                    <h4>Problem Identification</h4>
-                    <p>Quickly isolate what's failing in the output vs. what's working. Focus iterations on specific failure points rather than rewriting entire prompts.</p>
-                </div>
-                <div class="methodology-card">
-                    <h4>Systematic Refinement</h4>
-                    <p>Build prompts incrementally, testing one variable change at a time. This creates learning loops that compound into reliable frameworks.</p>
-                </div>
-                <div class="methodology-card">
-                    <h4>Technical Precision</h4>
-                    <p>Use industry-specific terminology (cinematography, animation) rather than casual descriptors. Sora responds better to technical language.</p>
-                </div>
-                <div class="methodology-card">
-                    <h4>Constraint Architecture</h4>
-                    <p>Successful prompts combine creative direction with explicit technical constraints. Balance artistic vision with systematic control.</p>
-                </div>
-            </div>
+      <div class="container">
+        <h2 class="section-title">Reusable Methodology</h2>
+        <div class="methodology-grid">
+          <div class="methodology-card">
+            <h4>Problem Identification</h4>
+            <p>
+              Quickly isolate what's failing in the output vs. what's working.
+              Focus iterations on specific failure points rather than rewriting
+              entire prompts.
+            </p>
+          </div>
+          <div class="methodology-card">
+            <h4>Systematic Refinement</h4>
+            <p>
+              Build prompts incrementally, testing one variable change at a
+              time. This creates learning loops that compound into reliable
+              frameworks.
+            </p>
+          </div>
+          <div class="methodology-card">
+            <h4>Technical Precision</h4>
+            <p>
+              Use industry-specific terminology (cinematography, animation)
+              rather than casual descriptors. Sora responds better to technical
+              language.
+            </p>
+          </div>
+          <div class="methodology-card">
+            <h4>Constraint Architecture</h4>
+            <p>
+              Successful prompts combine creative direction with explicit
+              technical constraints. Balance artistic vision with systematic
+              control.
+            </p>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-name">Daneen Mays</div>
-                <div class="footer-links">
-                    <a href="/index.html">Portfolio</a>
-                    <a href="/Resume.pdf">Resume</a>
-                    <a href="https://github.com/DaneenM">GitHub</a>
-                    <a href="https://linkedin.com/in/daneen-mays">LinkedIn</a>
-                </div>
-            </div>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-name">Daneen Mays</div>
+          <div class="footer-links">
+            <a href="/index.html">Portfolio</a>
+            <a href="/Resume.pdf">Resume</a>
+            <a href="https://github.com/DaneenM">GitHub</a>
+            <a href="https://linkedin.com/in/daneen-mays">LinkedIn</a>
+          </div>
         </div>
+      </div>
     </footer>
 
     <script>
-        function toggleIteration(type) {
-            const content = document.getElementById(type + '-content');
-            const toggle = content.previousElementSibling;
-            
-            if (content.classList.contains('expanded')) {
-                content.classList.remove('expanded');
-                toggle.classList.remove('expanded');
-            } else {
-                content.classList.add('expanded');
-                toggle.classList.add('expanded');
-            }
+      function toggleIteration(type) {
+        const content = document.getElementById(type + "-content");
+        const toggle = content.previousElementSibling;
+
+        if (content.classList.contains("expanded")) {
+          content.classList.remove("expanded");
+          toggle.classList.remove("expanded");
+        } else {
+          content.classList.add("expanded");
+          toggle.classList.add("expanded");
         }
+      }
     </script>
-</body>
+  </body>
 </html>
