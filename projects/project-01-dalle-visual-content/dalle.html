@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DALL-E Visual AI Engineering | Daneen Mays</title>
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --text-muted: #9ca3af;
+        --surface: #ffffff;
+        --surface-alt: #f9fafb;
+        --border: #e5e7eb;
+        --code-bg: #f3f4f6;
+        --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+          sans-serif;
+        line-height: 1.6;
+        color: var(--text-primary);
+        background: var(--surface);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Header */
+      header {
+        padding: 24px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+
+      .back-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+      }
+
+      .back-nav:hover {
+        color: var(--primary);
+      }
+
+      /* Hero Section */
+      .hero-section {
+        padding: 80px 0 60px;
+        text-align: center;
+        background: linear-gradient(
+          135deg,
+          var(--surface) 0%,
+          var(--surface-alt) 100%
+        );
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero-title {
+        font-size: 42px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+        line-height: 1.1;
+      }
+
+      .hero-subtitle {
+        font-size: 20px;
+        color: var(--text-secondary);
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.5;
+      }
+
+      /* Attribute Demonstrations */
+      .demonstrations-section {
+        padding: 80px 0;
+      }
+
+      .demonstrations-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 60px;
+        margin-bottom: 60px;
+      }
+
+      .attribute-demo {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .demo-header {
+        text-align: center;
+        margin-bottom: 30px;
+        flex-shrink: 0;
+        height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .demo-header h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+
+      .demo-showcase {
+        font-size: 16px;
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+        font-style: italic;
+      }
+
+      /* Visual Container */
+      .visual-container {
+        background: var(--surface);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin-bottom: 30px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .visual-container:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .visual-wrapper {
+        width: 100%;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+        background: var(--surface-alt);
+      }
+
+      .visual-wrapper img,
+      .visual-wrapper video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .visual-wrapper img:hover,
+      .visual-wrapper video:hover {
+        transform: scale(1.02);
+      }
+
+      .visual-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
+        padding: 40px;
+        line-height: 1.4;
+      }
+
+      /* Prompt Formula */
+      .prompt-section {
+        margin-bottom: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .prompt-section h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+
+      .prompt-formula {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+        font-size: 12px;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+        line-height: 1.4;
+        flex: 1;
+        max-height: 120px;
+        overflow-y: auto;
+      }
+
+      .card-explanation {
+        background: var(--surface-alt);
+        border-radius: 8px;
+        padding: 16px;
+        border-left: 4px solid var(--primary);
+        flex-shrink: 0;
+      }
+
+      .card-explanation p {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin-bottom: 8px;
+      }
+
+      .card-explanation p:last-child {
+        margin-bottom: 0;
+      }
+
+      /* Attribute Reference Chart */
+      .chart-section {
+        background: var(--surface-alt);
+        padding: 80px 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .chart-intro {
+        text-align: center;
+        margin-bottom: 48px;
+      }
+
+      .chart-intro p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+
+      .csv-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 12px 24px;
+        border: 2px solid var(--primary);
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+
+      .csv-link:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .attribute-chart {
+        background: var(--surface);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+      }
+
+      .chart-header,
+      .chart-row {
+        display: grid;
+        grid-template-columns: 200px 1fr 1fr 1fr;
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .chart-header .chart-col {
+        background: var(--text-primary);
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 20px 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: center;
+      }
+
+      .chart-row .chart-col {
+        background: var(--surface);
+        padding: 20px 16px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+      }
+
+      .chart-row:hover .chart-col {
+        background: var(--surface-alt);
+      }
+
+      .attribute-name {
+        justify-content: center;
+      }
+
+      .attribute-badge {
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white;
+        text-align: center;
+        width: 150px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .attribute-badge.lighting {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+
+      .attribute-badge.texture {
+        background: linear-gradient(135deg, #059669, #047857);
+      }
+
+      .attribute-badge.color {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+      }
+
+      .attribute-badge.scale {
+        background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      }
+
+      .attribute-badge.composition {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      }
+
+      .attribute-badge.atmosphere {
+        background: linear-gradient(135deg, #0891b2, #0e7490);
+      }
+
+      /* Responsive Chart */
+      @media (max-width: 1024px) {
+        .chart-header,
+        .chart-row {
+          grid-template-columns: 160px 1fr 1fr 1fr;
+        }
+
+        .chart-header .chart-col,
+        .chart-row .chart-col {
+          padding: 16px 12px;
+          font-size: 13px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .chart-section {
+          padding: 60px 0;
+        }
+
+        .chart-intro {
+          margin-bottom: 32px;
+        }
+
+        .chart-intro p {
+          font-size: 16px;
+        }
+
+        .attribute-chart {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          background: transparent;
+          box-shadow: none;
+          border: none;
+        }
+
+        .chart-header {
+          display: none;
+        }
+
+        .chart-row {
+          display: block;
+          background: var(--surface);
+          border-radius: 12px;
+          box-shadow: var(--shadow);
+          border: 1px solid var(--border);
+          overflow: hidden;
+        }
+
+        .chart-row:hover .chart-col {
+          background: var(--surface);
+        }
+
+        .chart-row .chart-col {
+          display: block;
+          padding: 16px 20px;
+          border-bottom: 1px solid var(--border);
+          background: var(--surface);
+        }
+
+        .chart-row .chart-col:last-child {
+          border-bottom: none;
+        }
+
+        .chart-row .attribute-name {
+          background: var(--surface-alt);
+          padding: 20px;
+          text-align: center;
+          border-bottom: 2px solid var(--border);
+        }
+
+        .chart-row .chart-col:not(.attribute-name) {
+          position: relative;
+          padding-top: 12px;
+          padding-bottom: 16px;
+        }
+
+        .chart-row .chart-col:not(.attribute-name)::before {
+          content: attr(data-label) ":";
+          font-weight: 600;
+          color: var(--text-secondary);
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          display: block;
+          margin-bottom: 8px;
+          line-height: 1.2;
+        }
+
+        .attribute-badge {
+          font-size: 11px;
+          padding: 10px 20px;
+        }
+      }
+      .process-section {
+        background: var(--surface-alt);
+        padding: 80px 0;
+      }
+
+      .section-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 32px;
+        color: var(--text-primary);
+        text-align: center;
+      }
+
+      .process-content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .process-intro {
+        font-size: 18px;
+        color: var(--text-secondary);
+        margin-bottom: 32px;
+        line-height: 1.6;
+      }
+
+      .process-steps {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+      }
+
+      .process-steps li {
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 16px;
+        color: var(--text-secondary);
+        position: relative;
+        padding-left: 24px;
+        line-height: 1.6;
+      }
+
+      .process-steps li:last-child {
+        border-bottom: none;
+      }
+
+      .process-steps li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--primary);
+        font-weight: 600;
+        top: 16px;
+      }
+
+      .process-steps strong {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      /* Video Demonstrations */
+      .video-section {
+        padding: 80px 0;
+      }
+
+      .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 32px;
+        margin-top: 40px;
+      }
+
+      .video-demo {
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 32px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .video-demo:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .video-demo h5 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+
+      .video-demo p {
+        font-size: 14px;
+        color: var(--text-secondary);
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        cursor: pointer;
+      }
+
+      .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+      }
+
+      .close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 1001;
+      }
+
+      .close:hover {
+        opacity: 0.7;
+      }
+
+      /* Footer */
+      footer {
+        background: var(--text-primary);
+        color: white;
+        padding: 48px 0;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+
+      .footer-name {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 24px;
+      }
+
+      .footer-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer-links a:hover {
+        color: white;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 32px;
+        }
+
+        .hero-subtitle {
+          font-size: 18px;
+        }
+
+        .demonstrations-section {
+          padding: 60px 0;
+        }
+
+        .demonstrations-grid {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+
+        .demo-header h3 {
+          font-size: 22px;
+        }
+
+        .demo-showcase {
+          font-size: 15px;
+        }
+
+        .visual-wrapper {
+          height: 250px;
+        }
+
+        .process-section,
+        .video-section {
+          padding: 60px 0;
+        }
+
+        .footer-content {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 0 16px;
+        }
+
+        .hero-section {
+          padding: 60px 0 40px;
+        }
+
+        .prompt-formula {
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <nav class="container">
+        <a href="../../index.html" class="logo">Daneen Mays</a>
+        <a href="../../index.html" class="back-nav"> ← Back to Portfolio </a>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <h1 class="hero-title">Visual Design with DALL-E</h1>
+        <p class="hero-subtitle">
+          Demonstrating systematic exploration of fundamental visual elements
+          through precision prompt engineering. Each formula showcases how to
+          reliably engineer specific visual outcomes - techniques applicable
+          across all forms of professional visual content creation.
+        </p>
+      </div>
+    </section>
+
+    <!-- Attribute Demonstrations -->
+    <section class="demonstrations-section">
+      <div class="container">
+        <div class="demonstrations-grid">
+          <!-- Demonstration 1: Lighting and Mood -->
+          <div class="attribute-demo">
+            <div class="demo-header">
+              <h3>Lighting and Mood</h3>
+              <p class="demo-showcase">
+                <strong>Prompt Goal:</strong> Showcase emotional atmosphere
+                through strategic lighting
+              </p>
+              <p class="demo-showcase">
+                <strong>Application:</strong> Brand Design + Editorial
+              </p>
+            </div>
+
+            <div class="visual-container">
+              <div class="visual-wrapper">
+                <img
+                  src="/assets/attribute1.png"
+                  alt="Computer"
+                  onclick="openModal(this)"
+                />
+              </div>
+            </div>
+
+            <div class="prompt-section">
+              <h4>Prompt Summary:</h4>
+              <div class="prompt-formula">
+                Modern glass conference room at golden hour with a sleek laptop
+                open on a wooden table. Warm natural light streams through
+                floor-to-ceiling windows, creating soft highlights on the
+                device's screen and keyboard while casting gentle shadows across
+                the polished surface. Cool blue interface glow balances the warm
+                ambient lighting. Professional atmosphere, cinematic quality,
+                corporate elegance.
+              </div>
+
+              <div class="card-explanation">
+                <p>
+                  <strong>Attribute:</strong> Demonstrates precise showcasing of
+                  mixed lighting sources (natural + screen glow), temperature
+                  balance (warm ambient + cool digital), and corporate mood
+                  creation for brand storytelling.
+                </p>
+                <p>
+                  <strong>Reusable:</strong> Teams commercials, Surface product
+                  launches, LinkedIn campaigns, corporate presentations, brand
+                  photography
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Demonstration 2: Texture Emphasis -->
+          <div class="attribute-demo">
+            <div class="demo-header">
+              <h3>Texture Emphasis</h3>
+              <p class="demo-showcase">
+                <strong>Prompt Goal:</strong> Engineer tactile realism and
+                material clarity
+              </p>
+              <p class="demo-showcase">
+                <strong>Application:</strong> Product Marketing + Architecture
+              </p>
+            </div>
+
+            <div class="visual-container">
+              <div class="visual-wrapper">
+                <img
+                  src="/assets/attribute2.png"
+                  alt="muted animated frog"
+                  onclick="openModal(this)"
+                />
+              </div>
+            </div>
+
+            <div class="prompt-section">
+              <h4>Prompt Summary:</h4>
+              <div class="prompt-formula">
+                Close-up of weathered hands holding fresh bread, flour dusting
+                the fingertips. Every line in the palm, callus, and grain of the
+                crust rendered in tactile detail. The bread's surface shows
+                bubbled texture with golden-brown variations, while flour
+                particles catch soft window light. Contrast between rough, aged
+                skin and smooth, warm bread creates a story of craft and care.
+              </div>
+
+              <div class="card-explanation">
+                <p>
+                  <strong>Attribute:</strong> Demonstrates highlighting of
+                  contrasting surface textures, realistic skin rendering, food
+                  photography detail, and material interaction that creates
+                  emotional connection through tactile believability.
+                </p>
+                <p>
+                  <strong>Reusable:</strong> Food campaigns, artisan
+                  storytelling, premium product shots, editorial photography,
+                  human-centered design visuals
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Demonstration 3: Color Grading -->
+          <div class="attribute-demo">
+            <div class="demo-header">
+              <h3>Color Grading / Tonal Exploration</h3>
+              <p class="demo-showcase">
+                <strong>Prompt Goal:</strong> Demonstrate tonal palette and
+                emotional color direction
+              </p>
+              <p class="demo-showcase">
+                <strong>Application:</strong> Brand Identity + Social Campaigns
+              </p>
+            </div>
+
+            <div class="visual-container">
+              <div class="visual-wrapper">
+                <img
+                  src="/assets/attribute3.png"
+                  alt="Vintage Record Store"
+                  onclick="openModal(this)"
+                />
+              </div>
+            </div>
+
+            <div class="prompt-section">
+              <h4>Prompt Summary:</h4>
+              <div class="prompt-formula">
+                Vintage record store interior bathed in warm amber lighting from
+                old Edison bulbs. Rows of vinyl records create geometric
+                patterns in deep burgundy and forest green spines. A customer's
+                silhouette browses in the background, lit by cool blue light
+                from a neon "Open" sign. The entire scene uses a complementary
+                orange-teal color grade that feels both nostalgic and
+                contemporary.
+              </div>
+
+              <div class="card-explanation">
+                <p>
+                  <strong>Attribute:</strong> Demonstrates precise color
+                  temperature showcasing, complementary palette execution,
+                  environmental storytelling through tonal choices, and mood
+                  creation that works across different lighting sources while
+                  maintaining visual cohesion.
+                </p>
+                <p>
+                  <strong>Reusable:</strong> Lifestyle campaigns, documentary
+                  photography, brand storytelling, social media content,
+                  environmental portraits, cultural narratives
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Demonstration 4: Scale and Proportion -->
+          <div class="attribute-demo">
+            <div class="demo-header">
+              <h3>Scale & Proportion</h3>
+              <p class="demo-showcase">
+                <strong>Prompt Goal:</strong> Highlight spatial relationships
+                and impact through size manipulation
+              </p>
+              <p class="demo-showcase">
+                <strong>Application:</strong> UX Design + Concept Visualization
+              </p>
+            </div>
+
+            <div class="visual-container">
+              <div class="visual-wrapper">
+                <img
+                  src="/assets/attribute4.png"
+                  alt="Girl in Modern Subway Station"
+                  onclick="openModal(this)"
+                />
+              </div>
+            </div>
+
+            <div class="prompt-section">
+              <h4>Prompt Summary:</h4>
+              <div class="prompt-formula">
+                A beautiful young Black girl with natural curls stands in a
+                bright, modern subway station, her face filled with wonder as
+                she gazes up at the soaring vaulted ceiling. Massive
+                architectural arches create rhythmic geometric patterns
+                overhead, stretching far above her small frame. Clean LED
+                lighting illuminates the polished surfaces while emphasizing the
+                dramatic scale contrast between her curious expression and the
+                grand public infrastructure surrounding her.
+              </div>
+
+              <div class="card-explanation">
+                <p>
+                  <strong>Attribute:</strong> Demonstrates dramatic scale
+                  contrast through architectural perspective, human-centered
+                  composition, emotional storytelling through proportion, and
+                  spatial relationships that create narrative tension between
+                  individual wonder and monumental design.
+                </p>
+                <p>
+                  <strong>Reusable:</strong> Educational campaigns, inspiration
+                  content, architectural visualization, progress narratives,
+                  urban planning, human-centered design storytelling
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Demonstration 5: Atmosphere -->
+          <div class="attribute-demo">
+            <div class="demo-header">
+              <h3>Atmosphere</h3>
+              <p class="demo-showcase">
+                <strong>Prompt Goal:</strong> Showcase environmental depth and
+                mood through particle effects
+              </p>
+              <p class="demo-showcase">
+                <strong>Application:</strong> Cinematics + Immersive Content
+              </p>
+            </div>
+
+            <div class="visual-container">
+              <div class="visual-wrapper">
+                <img
+                  src="/assets/attribute5.png"
+                  alt="Modern Sculpture Garden at Dawn"
+                  onclick="openModal(this)"
+                />
+              </div>
+            </div>
+
+            <div class="prompt-section">
+              <h4>Prompt Summary:</h4>
+              <div class="prompt-formula">
+                Modern outdoor sculpture garden at dawn with dense fog rolling
+                through geometric art installations. Soft morning light filters
+                through the mist, creating dramatic light rays that reveal and
+                conceal the abstract sculptures. The fog acts as a natural
+                diffusion layer, adding depth and mystery to the space while
+                transforming familiar forms into ethereal silhouettes.
+              </div>
+
+              <div class="card-explanation">
+                <p>
+                  <strong>Attribute:</strong> Demonstrates atmospheric particle
+                  exploration, light diffusion techniques, environmental mood
+                  creation, and depth layering that transforms static scenes
+                  into immersive experiences with natural volumetric effects.
+                </p>
+                <p>
+                  <strong>Reusable:</strong> Cinematic content, gaming
+                  environments, architectural visualization, brand atmosphere,
+                  conceptual films, XR experiences
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Demonstration 6: Composition & Focus -->
+          <div class="attribute-demo">
+            <div class="demo-header">
+              <h3>Composition & Focus</h3>
+              <p class="demo-showcase">
+                <strong>Prompt Goal:</strong> Direct attention and create visual
+                hierarchy through strategic focus techniques
+              </p>
+              <p class="demo-showcase">
+                <strong>Application:</strong> UI Design + Print/Slide Design
+              </p>
+            </div>
+
+            <div class="visual-container">
+              <div class="visual-wrapper">
+                <img
+                  src="/assets/attribute6.png"
+                  alt="Chef's Knife Mid-Chop"
+                  onclick="openModal(this)"
+                />
+              </div>
+            </div>
+
+            <div class="prompt-section">
+              <h4>Prompt Summary:</h4>
+              <div class="prompt-formula">
+                A chef's knife mid-chop above fresh herbs on a dark cutting
+                board, captured with perfect selective focus. The blade edge is
+                razor-sharp in focus while herb leaves blur into soft green
+                bokeh in the foreground and background. Dramatic shallow depth
+                of field isolates the precise moment of cutting, with scattered
+                parsley creating leading lines toward the focal point.
+              </div>
+
+              <div class="card-explanation">
+                <p>
+                  <strong>Attribute:</strong> Demonstrates precise depth of
+                  field techniques, selective focus highlighting, attention
+                  direction through blur patterns, and visual hierarchy creation
+                  that guides the eye exactly where intended.
+                </p>
+                <p>
+                  <strong>Reusable:</strong> Food photography, action shots,
+                  product details, instructional content, process documentation,
+                  artistic portraits
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Attribute Reference Chart -->
+    <section class="chart-section">
+      <div class="container">
+        <h2 class="section-title">Attribute Reference Guide</h2>
+        <div class="chart-intro">
+          <p>
+            Quick reference for optimal subject selection and business
+            applications for each visual attribute
+          </p>
+          <a href="#" class="csv-link" onclick="downloadCSV()"
+            >📊 Download Complete Attribute Library (CSV)</a
+          >
+        </div>
+
+        <div class="attribute-chart">
+          <div class="chart-header">
+            <div class="chart-col">Attribute</div>
+            <div class="chart-col">Ideal Visual Subject</div>
+            <div class="chart-col">Why It Works</div>
+            <div class="chart-col">Relevant Use</div>
+          </div>
+
+          <div class="chart-row">
+            <div class="chart-col attribute-name">
+              <span class="attribute-badge lighting">Lighting & Mood</span>
+            </div>
+            <div class="chart-col" data-label="Ideal Visual Subject">
+              Minimalist workspace at sunrise
+            </div>
+            <div class="chart-col" data-label="Why It Works">
+              Natural lighting, mood, storytelling
+            </div>
+            <div class="chart-col" data-label="Microsoft-Relevant Use">
+              Brand/editorial (Surface, Teams, lifestyle)
+            </div>
+          </div>
+
+          <div class="chart-row">
+            <div class="chart-col attribute-name">
+              <span class="attribute-badge texture">Texture Emphasis</span>
+            </div>
+            <div class="chart-col" data-label="Ideal Visual Subject">
+              Architectural interior with mixed materials (glass, concrete,
+              wood, metal)
+            </div>
+            <div class="chart-col" data-label="Why It Works">
+              Real-world textures under studio lighting
+            </div>
+            <div class="chart-col" data-label="Microsoft-Relevant Use">
+              Product marketing, Azure data center visuals
+            </div>
+          </div>
+
+          <div class="chart-row">
+            <div class="chart-col attribute-name">
+              <span class="attribute-badge color">Color Grading</span>
+            </div>
+            <div class="chart-col" data-label="Ideal Visual Subject">
+              Rooftop cafe scene at golden hour vs dusk
+            </div>
+            <div class="chart-col" data-label="Why It Works">
+              Easy to showcase tone and mood with the same subject
+            </div>
+            <div class="chart-col" data-label="Microsoft-Relevant Use">
+              Campaign consistency, brand style guides
+            </div>
+          </div>
+
+          <div class="chart-row">
+            <div class="chart-col attribute-name">
+              <span class="attribute-badge scale">Scale & Proportion</span>
+            </div>
+            <div class="chart-col" data-label="Ideal Visual Subject">
+              A person standing in front of a massive digital billboard or
+              dashboard
+            </div>
+            <div class="chart-col" data-label="Why It Works">
+              Strong spatial tension, UX metaphor
+            </div>
+            <div class="chart-col" data-label="Microsoft-Relevant Use">
+              Concept visualization, product showcases
+            </div>
+          </div>
+
+          <div class="chart-row">
+            <div class="chart-col attribute-name">
+              <span class="attribute-badge composition"
+                >Composition & Focus</span
+              >
+            </div>
+            <div class="chart-col" data-label="Ideal Visual Subject">
+              Desktop workspace with layered tabs, one sharply in focus
+            </div>
+            <div class="chart-col" data-label="Why It Works">
+              Visually directs attention like UI does
+            </div>
+            <div class="chart-col" data-label="Microsoft-Relevant Use">
+              UX/UI design previews, software interfaces
+            </div>
+          </div>
+
+          <div class="chart-row">
+            <div class="chart-col attribute-name">
+              <span class="attribute-badge atmosphere">Atmosphere</span>
+            </div>
+            <div class="chart-col" data-label="Ideal Visual Subject">
+              Outdoor pavilion or sculpture garden in dense fog
+            </div>
+            <div class="chart-col" data-label="Why It Works">
+              Natural particles, light diffusion, environment mood
+            </div>
+            <div class="chart-col" data-label="Microsoft-Relevant Use">
+              Gaming, XR, conceptual brand films
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process Explanation -->
+    <section class="process-section">
+      <div class="container">
+        <h2 class="section-title">Engineering Process</h2>
+        <div class="process-content">
+          <p class="process-intro">
+            Each demonstration follows a systematic approach to showcase and
+            engineer specific visual attributes, proving consistent exploration
+            of AI-generated content.
+          </p>
+          <ul class="process-steps">
+            <li>
+              <strong>Attribute Highlighting:</strong> Focus on one visual
+              element while showcasing all other variables
+            </li>
+            <li>
+              <strong>Prompt Architecture:</strong> Build reusable formulas that
+              consistently deliver the target attribute
+            </li>
+            <li>
+              <strong>Technical Precision:</strong> Use specific terminology
+              that guides the AI toward exact visual outcomes
+            </li>
+            <li>
+              <strong>Quality Validation:</strong> Test formulas across
+              different subjects to ensure reliable repeatability
+            </li>
+            <li>
+              <strong>Documentation:</strong> Create clear explanations of why
+              each technique works for business applications
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-name">Daneen Mays</div>
+          <div class="footer-links">
+            <a href="/index.html">Portfolio</a>
+            <a href="/Resume.pdf">Resume</a>
+            <a href="https://github.com/DaneenM">GitHub</a>
+            <a href="https://linkedin.com/in/daneen-mays">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal for enlarged images -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="modalImage" />
+    </div>
+
+    <script>
+      function openModal(img) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+
+        modal.style.display = "block";
+        modalImg.src = img.src;
+        modalImg.alt = img.alt;
+
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("imageModal");
+        modal.style.display = "none";
+
+        document.body.style.overflow = "auto";
+      }
+
+      function downloadCSV() {
+        // Create CSV content from the attached file data
+        const csvContent = `Creative Visual Attributes
+Lighting Direction
+Color Temperature
+Depth of Field
+Composition Rules
+Texture Quality
+Scale Relationships
+Atmospheric Effects
+Shadow Play
+Visual Metaphors
+Contrast Techniques
+Saturation Levels
+Focus Points
+Leading Lines
+Symmetry/Asymmetry
+Pattern Recognition
+Motion Blur
+Light Quality
+Surface Materials
+Spatial Hierarchy
+Emotional Tone
+Brand Consistency
+Cultural Context
+Technical Precision
+Storytelling Elements
+Environmental Mood
+Particle Effects
+Volumetric Lighting
+Architectural Elements
+Human Elements
+Product Integration
+Interface Design
+User Experience
+Accessibility
+Brand Identity
+Social Media
+Campaign Cohesion
+Editorial Style
+Documentary Approach
+Commercial Appeal
+Artistic Vision
+Technical Innovation
+Future-Forward Design
+Cross-Platform Design
+Responsive Design
+Interactive Elements
+Animation Potential
+3D Integration
+AR/VR Applications
+Gaming Aesthetics`;
+
+        const blob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "creative_visual_attributes.csv");
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html>
