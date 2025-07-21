@@ -166,6 +166,42 @@
             line-height: 1.6;
         }
 
+        /* Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .comparison-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comparison-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .failed-label {
+            background: #FEF2F2;
+            color: var(--error);
+            border: 1px solid #FECACA;
+        }
+
+        .success-label {
+            background: #F0FDF4;
+            color: var(--success);
+            border: 1px solid #BBF7D0;
+        }
+
         /* Video Result Section */
         .video-result {
             padding: 24px 32px;
@@ -183,7 +219,6 @@
         .comparison-item {
             display: flex;
             flex-direction: column;
-            height: 100%;
         }
 
         .comparison-label {
@@ -191,11 +226,10 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 16px;
-            padding: 10px 12px;
+            margin-bottom: 12px;
+            padding: 8px 12px;
             border-radius: 6px;
             text-align: center;
-            flex-shrink: 0;
         }
 
         .failed-label {
@@ -779,7 +813,7 @@
                                 <div class="video-container">
                                     <div class="video-placeholder">
                                         [Consistent Pixar-style fox with stable features across multiple emotional scenes]<br>
-                                        <small>Systematic character DNA development through 3 iterations</small>
+                                        <small>Systematic character development through 3 iterations</small>
                                     </div>
                                 </div>
                             </div>
