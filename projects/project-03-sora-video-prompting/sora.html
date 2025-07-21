@@ -868,14 +868,10 @@
                     Before (Failed Attempt)
                   </div>
                   <div class="video-container">
-                    <div class="video-placeholder">
-                      [Fox character morphing between species, changing colors,
-                      and losing distinctive features]<br />
-                      <small
-                        >Generic prompt: "Orange fox character in animated
-                        style"</small
-                      >
-                    </div>
+                    <video width="100%" height="100%" controls>
+                      <source src="../../assets/fox1.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
                   </div>
                 </div>
                 <div class="comparison-item">
@@ -883,24 +879,20 @@
                     After (Final Success)
                   </div>
                   <div class="video-container">
-                    <div class="video-placeholder">
-                      [Consistent Pixar-style fox with stable features across
-                      multiple emotional scenes]<br />
-                      <small
-                        >Systematic character development through 2
-                        iterations</small
-                      >
-                    </div>
+                    <video width="100%" height="100%" controls>
+                      <source src="../../assets/fox2.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
                   </div>
                 </div>
               </div>
               <div class="final-prompt">
                 Pixar-style 3D animated fox character: small to medium size,
                 bright orange fur with cream-colored chest and inner ears,
-                distinctive white ears with black tips and tail, large expressive amber
-                eyes, black nose, friendly facial structure with slightly
-                rounded snout. Consistent character design across scenes,
-                maintain fur texture and color patterns, warm lighting,
+                distinctive white ears with black tips and tail, large
+                expressive amber eyes, black nose, friendly facial structure
+                with slightly rounded snout. Consistent character design across
+                scenes, maintain fur texture and color patterns, warm lighting,
                 family-friendly animation style, expressive but stable features
                 throughout different emotions and actions.
               </div>
@@ -920,24 +912,32 @@
                 <div class="iteration-step failed">
                   <div class="step-header">
                     <div class="step-number">1</div>
-                    <div class="step-title">Basic Animal Description</div>
+                    <div class="step-title">Detailed Character Description</div>
                     <div class="step-status">Failed</div>
                   </div>
                   <div class="prompt-code">
-                    "Pixar-style 3D animated fox character: small to medium size, bright orange fur with cream-colored chest and inner ears, distinctive black-tipped ears and tail, large expressive amber eyes, black nose, friendly facial structure with slightly rounded snout. Consistent character design across scenes, maintain fur texture and color patterns, warm lighting, family-friendly animation style, expressive but stable features throughout different emotions and actions."
+                    "Pixar-style 3D animated fox character: small to medium
+                    size, bright orange fur with cream-colored chest and inner
+                    ears, distinctive black-tipped ears and tail, large
+                    expressive amber eyes, black nose, friendly facial structure
+                    with slightly rounded snout. Consistent character design
+                    across scenes, maintain fur texture and color patterns, warm
+                    lighting, family-friendly animation style, expressive but
+                    stable features throughout different emotions and actions."
                   </div>
                   <div class="step-analysis">
                     <strong>Result:</strong> Character inconsistency issues with
-                    ear markings. The fox maintained its species and basic orange
-                    coloring, but the distinctive black ear tips failed to appear
-                    correctly - instead showing entirely black ears when only the
-                    tips should be black.
+                    ear markings. The fox maintained its species and basic
+                    orange coloring, but the distinctive black ear tips failed
+                    to appear correctly - instead showing entirely black ears
+                    when only the tips should be black.
                   </div>
                   <div class="step-insight">
-                    <strong>Problem Identified:</strong> Classic Sora limitation
-                    - vague descriptors cause character drift and species
-                    confusion. Objects/characters can "morph" unexpectedly
-                    during transitions.
+                    <strong>Problem Identified:</strong> The prompt was
+                    comprehensive but lacked precision in color specification.
+                    "Black-tipped ears" was ambiguous - Sora interpreted this as
+                    fully black ears instead of white ears with black tips. Need
+                    more explicit color boundaries and anatomical precision.
                   </div>
                 </div>
 
@@ -945,7 +945,9 @@
                 <div class="iteration-step success">
                   <div class="step-header">
                     <div class="step-number">2</div>
-                    <div class="step-title">Complete Character DNA + Consistency Commands</div>
+                    <div class="step-title">
+                      Complete Character DNA + Consistency Commands
+                    </div>
                     <div class="step-status">Success</div>
                   </div>
                   <div class="prompt-code">
@@ -967,54 +969,13 @@
                   <div class="step-insight">
                     <strong>Key Breakthrough:</strong> Comprehensive character
                     profile + explicit "maintain" commands + "consistent design
-                    across scenes" directly addresses Sora's ear marking precision
-                    issues. Detailed anatomical anchors ensure proper black-tipped
-                    ears without color bleeding.
+                    across scenes" directly addresses Sora's ear marking
+                    precision issues. Detailed anatomical anchors ensure proper
+                    black-tipped ears without color bleeding.
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Methodology Extraction -->
-    <section class="methodology-section">
-      <div class="container">
-        <h2 class="section-title">Reusable Methodology</h2>
-        <div class="methodology-grid">
-          <div class="methodology-card">
-            <h4>Problem Identification</h4>
-            <p>
-              Quickly isolate what's failing in the output vs. what's working.
-              Focus iterations on specific failure points rather than rewriting
-              entire prompts.
-            </p>
-          </div>
-          <div class="methodology-card">
-            <h4>Systematic Refinement</h4>
-            <p>
-              Build prompts incrementally, testing one variable change at a
-              time. This creates learning loops that compound into reliable
-              frameworks.
-            </p>
-          </div>
-          <div class="methodology-card">
-            <h4>Technical Precision</h4>
-            <p>
-              Use industry-specific terminology (cinematography, animation)
-              rather than casual descriptors. Sora responds better to technical
-              language.
-            </p>
-          </div>
-          <div class="methodology-card">
-            <h4>Constraint Architecture</h4>
-            <p>
-              Successful prompts combine creative direction with explicit
-              technical constraints. Balance artistic vision with systematic
-              control.
-            </p>
           </div>
         </div>
       </div>
