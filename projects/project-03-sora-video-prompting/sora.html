@@ -630,14 +630,13 @@
                     Before (Failed Attempt)
                   </div>
                   <div class="video-container">
-                    <div class="video-placeholder">
-                      [Erratic camera movement with jerky motion and presenter
-                      moving in/out of frame]<br />
-                      <small
-                        >Generic prompt: "Camera follows presenter walking in
-                        conference room"</small
-                      >
-                    </div>
+                    <video width="100%" height="100%" controls>
+                      <source
+                        src="../../assets/confident_man1.mp4"
+                        type="video/mp4"
+                      />
+                      Your browser does not support the video tag.
+                    </video>
                   </div>
                 </div>
                 <div class="comparison-item">
@@ -645,14 +644,13 @@
                     After (Final Success)
                   </div>
                   <div class="video-container">
-                    <div class="video-placeholder">
-                      [Professional dolly shot with stable tracking and perfect
-                      presenter framing]<br />
-                      <small
-                        >Systematic refinement through 6 iterations of prompt
-                        engineering</small
-                      >
-                    </div>
+                    <video width="100%" height="100%" controls>
+                      <source
+                        src="../../assets/confident_man2.mp4"
+                        type="video/mp4"
+                      />
+                      Your browser does not support the video tag.
+                    </video>
                   </div>
                 </div>
               </div>
@@ -680,10 +678,50 @@
               </button>
 
               <div class="iteration-content" id="realistic-content">
-                <!-- Iteration 1: Failed -->
+                <!-- Original Failure Prompt -->
                 <div class="iteration-step failed">
                   <div class="step-header">
                     <div class="step-number">1</div>
+                    <div class="step-title">Original Failure Prompt</div>
+                    <div class="step-status">Failed</div>
+                  </div>
+                  <div class="prompt-code">
+                    "Professional dolly tracking shot following a business
+                    presenter walking alongside a large wall-mounted display
+                    screen in a modern conference room. Camera maintains
+                    constant 6-foot distance, presenter centered in left third
+                    of frame, display screen visible on right. Smooth parallel
+                    motion, no camera shake, corporate lighting, sharp focus on
+                    the presenter with slight background blur. Executive
+                    presentation setting, professional attire, broadcast-quality
+                    cinematography"
+                  </div>
+                  <div class="step-analysis">
+                    <strong>Result:</strong> Major human movement failures
+                    throughout the sequence. The presenter's legs continuously
+                    walked through each other rather than maintaining a natural
+                    gait, his posture was unnaturally stiff like he was carrying
+                    a serving tray, and he stared blankly into space instead of
+                    maintaining professional eye contact. The overall result was
+                    severely unprofessional and completely unusable for
+                    corporate content.
+                  </div>
+                  <div class="step-insight">
+                    <strong>Key Learning:</strong> Despite comprehensive
+                    technical specifications, Sora struggles fundamentally with
+                    natural human movement and behavior. The detailed prompt
+                    couldn't overcome basic locomotion failures, demonstrating
+                    that human animation requires specific constraint strategies
+                    beyond camera and lighting parameters. This failure revealed
+                    the need to systematically isolate and address different
+                    prompt components.
+                  </div>
+                </div>
+
+                <!-- Iteration 2: Failed -->
+                <div class="iteration-step failed">
+                  <div class="step-header">
+                    <div class="step-number">2</div>
                     <div class="step-title">Basic Motion Request</div>
                     <div class="step-status">Failed</div>
                   </div>
@@ -704,10 +742,10 @@
                   </div>
                 </div>
 
-                <!-- Iteration 2: Equipment Terms -->
+                <!-- Iteration 3: Equipment Terms -->
                 <div class="iteration-step failed">
                   <div class="step-header">
-                    <div class="step-number">2</div>
+                    <div class="step-number">3</div>
                     <div class="step-title">
                       Professional Equipment Approach
                     </div>
@@ -729,10 +767,10 @@
                   </div>
                 </div>
 
-                <!-- Iteration 3: Spatial Constraints -->
+                <!-- Iteration 4: Spatial Constraints -->
                 <div class="iteration-step improved">
                   <div class="step-header">
-                    <div class="step-number">3</div>
+                    <div class="step-number">4</div>
                     <div class="step-title">Added Spatial Positioning</div>
                     <div class="step-status">Improved</div>
                   </div>
@@ -753,10 +791,10 @@
                   </div>
                 </div>
 
-                <!-- Iteration 4: Technical Parameters -->
+                <!-- Iteration 5: Technical Parameters -->
                 <div class="iteration-step improved">
                   <div class="step-header">
-                    <div class="step-number">4</div>
+                    <div class="step-number">5</div>
                     <div class="step-title">
                       Distance & Motion Specifications
                     </div>
@@ -779,10 +817,10 @@
                   </div>
                 </div>
 
-                <!-- Iteration 5: Professional Polish -->
+                <!-- Iteration 6: Professional Polish -->
                 <div class="iteration-step improved">
                   <div class="step-header">
-                    <div class="step-number">5</div>
+                    <div class="step-number">6</div>
                     <div class="step-title">Broadcast Quality Attempt</div>
                     <div class="step-status">Better</div>
                   </div>
@@ -805,10 +843,10 @@
                   </div>
                 </div>
 
-                <!-- Iteration 6: Success -->
+                <!-- Iteration 7: Success -->
                 <div class="iteration-step success">
                   <div class="step-header">
-                    <div class="step-number">6</div>
+                    <div class="step-number">7</div>
                     <div class="step-title">
                       Broadcast-Grade Corporate Video
                     </div>
